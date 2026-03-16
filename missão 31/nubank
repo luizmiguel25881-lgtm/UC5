@@ -1,0 +1,45 @@
+import random
+
+c = random.randint(1, 10)   # quantidade de clientes
+t = random.randint(1, 5)    # quantidade de transações por cliente
+
+def verifica_valor():
+    
+    resultados = []
+
+    for i in range(c):
+
+        transacoes_validas = []
+        contador = 0
+
+        for j in range(t):
+
+            v = round(random.uniform(0.00, 20000.00), 2)
+
+            if v >= 10000:
+                print(f"Foi verificada uma transação acima de R$10000. Possível fraude: R${v}")
+
+            if v > 0:
+                transacoes_validas.append(v)
+                contador += 1
+
+        resultados.append((contador, transacoes_validas))
+
+    return resultados
+
+
+def imprimir_transacoes(resultados):
+
+    for i, (contador, transacoes) in enumerate(resultados):
+        print(f"\nCliente {i+1}")
+        print(f"Quantidade de transações válidas: {contador}")
+        print("Transações válidas:", transacoes)
+
+
+def main():
+
+    resultados = verifica_valor()
+    imprimir_transacoes(resultados)
+
+
+main()
