@@ -1,45 +1,97 @@
 import random
+import time
 
-c = random.randint(1, 10)   # quantidade de clientes
-t = random.randint(1, 5)    # quantidade de transações por cliente
+def gera_clientes():
+    clientes = []
+    c = random.randint(1, 100)  # limite menor para não travar o computador
 
-def verifica_valor():
+    for i in range(c):
+        lista_cliente = []
+        clientes.append(lista_cliente)
+
+    return clientes 
+
+
+def gera_transacoes(clientes):
+    for cliente in clientes:
+        lista_transacoes = []
+
+        t = random.randint(1, 50)
+
+        for i in range(t):
+            v = round(random.uniform(0.00, 20000.00), 2)
+            lista_transacoes.append(v)
+
+        cliente.append(lista_transacoes)
+
+    return clientes
+
+
+def verifica_valor(clientes):
     
     resultados = []
 
-    for i in range(c):
-
+    for cliente in clientes:
+        
         transacoes_validas = []
-        contador = 0
+        validas = 0
+        invalidas = 0
 
-        for j in range(t):
+        for transacao in cliente[0]:
 
-            v = round(random.uniform(0.00, 20000.00), 2)
+            if transacao <= 0:
+                invalidas += 1
+                continue
 
-            if v >= 10000:
-                print(f"Foi verificada uma transação acima de R$10000. Possível fraude: R${v}")
+            if transacao > 10000:
+                print(f"Foi verificada uma transação acima de R$10000. Possível fraude: R${transacao}")
+                invalidas += 1
+                break
 
-            if v > 0:
-                transacoes_validas.append(v)
-                contador += 1
+            transacoes_validas.append(transacao)
+            validas += 1
 
-        resultados.append((contador, transacoes_validas))
+        resultados.append((validas, invalidas, transacoes_validas))
 
     return resultados
 
 
-def imprimir_transacoes(resultados):
+def contador_transacoes(analiza_clientes):
+    total_validas = 0
+    total_invalidas = 0
 
-    for i, (contador, transacoes) in enumerate(resultados):
+    for validas, invalidas, _ in analiza_clientes:
+        total_validas += validas
+        total_invalidas += invalidas
+
+    print("\nResumo geral:")
+    print(f"Total de transações válidas: {total_validas}")
+    print(f"Total de transações inválidas: {total_invalidas}")
+
+
+def imprimir_transacoes(resultados, tempo):
+
+    for i, (validas, invalidas, transacoes) in enumerate(resultados):
         print(f"\nCliente {i+1}")
-        print(f"Quantidade de transações válidas: {contador}")
-        print("Transações válidas:", transacoes)
+        print(f"Transações válidas: {validas}")
+        print(f"Transações inválidas: {invalidas}")
+        print("Lista de transações válidas:", transacoes)
+
+    print(f"\nTempo de execução: {tempo:.6f} segundos")
 
 
 def main():
 
-    resultados = verifica_valor()
-    imprimir_transacoes(resultados)
+    inicio = time.perf_counter()
+
+    clientes = gera_clientes()
+    clientes = gera_transacoes(clientes)
+    resultados = verifica_valor(clientes)
+
+    fim = time.perf_counter()
+
+    imprimir_transacoes(resultados, fim - inicio)
+    contador_transacoes(resultados)
 
 
 main()
